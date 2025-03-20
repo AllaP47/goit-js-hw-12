@@ -64,6 +64,7 @@ button:hover {
   justify-content: center;
   padding-top: 32px;
   list-style: none;
+  margin-bottom: 32px;
 }
 
 .gallery-item {
@@ -87,8 +88,8 @@ button:hover {
 
 .info {
   display: flex;
-  justify-content: space-around;
   width: 360px;
+  height: 40px;
 }
 
 .info p {
@@ -102,6 +103,7 @@ button:hover {
 .loader {
   display: none;
   text-align: center;
-  font-size: 20px;
-  margin-top: 20px;
+  font-size: 16px;
+  margin-top: 10px;
+  color: #333;
 }
