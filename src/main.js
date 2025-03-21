@@ -9,7 +9,7 @@ let totalHits = 0;
 const PER_PAGE = 15;
 const form = document.querySelector(".form");
 const loader = document.querySelector(".loader");
-const loadMoreBtn = document.createElement("button");
+const loadMoreBtn = document.querySelector(".load-more");
 loadMoreBtn.textContent = "Load more";
 loadMoreBtn.classList.add("load-more");
 loadMoreBtn.style.display = "none";
