@@ -16,7 +16,7 @@ const loadMoreBtn = document.querySelector(".load-more");
 
 loadMoreBtn.style.display = "none";
 
-
+console.log(loadMoreBtn)
   function showLoader () {
   loader.style.display = "block";
 }
@@ -33,7 +33,7 @@ form.addEventListener("submit", async (event) => {
 
   page = 1;
   totalLoaded = 0; 
-
+  loader.style.display = "block";
   loadMoreBtn.style.display = "none";
   showLoader();
   
