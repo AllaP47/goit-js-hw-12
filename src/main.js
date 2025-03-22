@@ -7,13 +7,15 @@ let query = "";
 let page = 1;
 let totalHits = 0;
 const PER_PAGE = 15;
+const MAX_IMAGES = 100;
+let totalLoaded = 0; 
+
 const form = document.querySelector(".form");
 const loader = document.querySelector(".loader");
 const loadMoreBtn = document.querySelector(".load-more");
-loadMoreBtn.textContent = "Load more";
-loadMoreBtn.classList.add("load-more");
+
 loadMoreBtn.style.display = "none";
-document.body.append(loadMoreBtn);
+
 
   function showLoader () {
   loader.style.display = "block";
@@ -22,8 +24,7 @@ document.body.append(loadMoreBtn);
   function hideLoader () {
   loader.style.display = "none";
 }
-const MAX_IMAGES = 100;
-let totalLoaded = 0; 
+
 
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
@@ -32,7 +33,7 @@ form.addEventListener("submit", async (event) => {
 
   page = 1;
   totalLoaded = 0; 
-  loader.style.display = "block";
+
   loadMoreBtn.style.display = "none";
   showLoader();
   
@@ -58,7 +59,7 @@ form.addEventListener("submit", async (event) => {
 loadMoreBtn.addEventListener("click", async () => {
   if (totalLoaded >= MAX_IMAGES) return;
   page += 1;
-  loader.style.display = "block";
+ 
   showLoader();
   try {
     const data = await fetchImages(query, page);
@@ -76,7 +77,7 @@ loadMoreBtn.addEventListener("click", async () => {
   } catch {
     iziToast.error({ title: "Error", message: "Failed to load more images" });
   } finally {
-    loader.style.display = "none";
+   
     hideLoader();
   }
 });
