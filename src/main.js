@@ -22,6 +22,8 @@ document.body.append(loadMoreBtn);
   function hideLoader () {
   loader.style.display = "none";
 }
+const MAX_IMAGES = 100;
+let totalLoaded = 0; 
 
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
@@ -29,34 +31,41 @@ form.addEventListener("submit", async (event) => {
   if (!query) return;
 
   page = 1;
-  showLoader();
+  totalLoaded = 0; 
+  loader.style.display = "block";
   loadMoreBtn.style.display = "none";
+  showLoader();
+  
 
   try {
     const data = await fetchImages(query, page);
     totalHits = data.totalHits;
     renderGallery(data.hits);
-
+    totalLoaded += data.hits.length;
     event.target.reset();
     
-    if (data.hits.length > 0) {
+    if (data.hits.length > 0 && totalLoaded < MAX_IMAGES) {
       loadMoreBtn.style.display = "block";
     }
   } catch {
     iziToast.error({ title: "Error", message: "Failed to fetch images" });
   } finally {
+    loader.style.display = "none";
     hideLoader();
   }
 });
 
 loadMoreBtn.addEventListener("click", async () => {
+  if (totalLoaded >= MAX_IMAGES) return;
   page += 1;
+  loader.style.display = "block";
   showLoader();
-
   try {
     const data = await fetchImages(query, page);
     renderGallery(data.hits, true);
-    if (page * PER_PAGE >= totalHits) {
+    totalLoaded += data.hits.length;
+
+    if (totalLoaded >= MAX_IMAGES || page * PER_PAGE >= totalHits) {
       loadMoreBtn.style.display = "none";
       iziToast.info({
         title: "Info",
@@ -67,6 +76,7 @@ loadMoreBtn.addEventListener("click", async () => {
   } catch {
     iziToast.error({ title: "Error", message: "Failed to load more images" });
   } finally {
+    loader.style.display = "none";
     hideLoader();
   }
 });

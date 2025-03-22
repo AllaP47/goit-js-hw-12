@@ -88,13 +88,11 @@ button:hover {
 
 .info {
   display: flex;
-  width: 360px;
-  height: 40px;
+
+  text-align: center;
 }
 
 .info p {
-  min-width: 34px;
-  max-height: 40px;
   display: flex;
 
   flex-direction: column-reverse;
