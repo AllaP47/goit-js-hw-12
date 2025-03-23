@@ -8,7 +8,7 @@ let page = 1;
 let totalHits = 0;
 const PER_PAGE = 15;
 const MAX_IMAGES = 100;
-let totalLoaded = 0; 
+let totalLoaded = 0;
 
 const form = document.querySelector(".form");
 const loader = document.querySelector(".loader");
@@ -16,15 +16,13 @@ const loadMoreBtn = document.querySelector(".load-more");
 
 loadMoreBtn.style.display = "none";
 
-console.log(loadMoreBtn)
-  function showLoader () {
+function showLoader() {
   loader.style.display = "block";
 }
-  
-  function hideLoader () {
+
+function hideLoader() {
   loader.style.display = "none";
 }
-
 
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
@@ -32,11 +30,9 @@ form.addEventListener("submit", async (event) => {
   if (!query) return;
 
   page = 1;
-  totalLoaded = 0; 
-  loader.style.display = "block";
-  loadMoreBtn.style.display = "none";
+  totalLoaded = 0;
   showLoader();
-  
+  loadMoreBtn.style.display = "none";
 
   try {
     const data = await fetchImages(query, page);
@@ -44,29 +40,28 @@ form.addEventListener("submit", async (event) => {
     renderGallery(data.hits);
     totalLoaded += data.hits.length;
     event.target.reset();
-    
-    if (data.hits.length > 0 && totalLoaded < MAX_IMAGES) {
+
+    if (data.hits.length > 0 && totalLoaded < Math.min(MAX_IMAGES, totalHits)) {
       loadMoreBtn.style.display = "block";
     }
   } catch {
     iziToast.error({ title: "Error", message: "Failed to fetch images" });
   } finally {
-    loader.style.display = "none";
     hideLoader();
   }
 });
 
 loadMoreBtn.addEventListener("click", async () => {
-  if (totalLoaded >= MAX_IMAGES) return;
+  if (totalLoaded >= Math.min(MAX_IMAGES, totalHits)) return;
   page += 1;
- 
+  
   showLoader();
   try {
     const data = await fetchImages(query, page);
     renderGallery(data.hits, true);
     totalLoaded += data.hits.length;
 
-    if (totalLoaded >= MAX_IMAGES || page * PER_PAGE >= totalHits) {
+    if (totalLoaded >= Math.min(MAX_IMAGES, totalHits)) {
       loadMoreBtn.style.display = "none";
       iziToast.info({
         title: "Info",
@@ -77,16 +72,16 @@ loadMoreBtn.addEventListener("click", async () => {
   } catch {
     iziToast.error({ title: "Error", message: "Failed to load more images" });
   } finally {
-   
     hideLoader();
   }
 });
 
 function smoothScroll() {
-  const { height } = document
-    .querySelector(".gallery-item")
-    .getBoundingClientRect();
-  window.scrollBy({ top: height * 2, behavior: "smooth" });
+  const galleryItem = document.querySelector(".gallery-item");
+  if (galleryItem) {
+    const { height } = galleryItem.getBoundingClientRect();
+    window.scrollBy({ top: height * 2, behavior: "smooth" });
+  }
 }
 
 
